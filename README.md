@@ -1,0 +1,4 @@
+panel
+=====
+
+Panel bar example
