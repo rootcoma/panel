@@ -1,0 +1,41 @@
+#! /bin/sh
+. ./panel_colors
+
+while read -r line ; do
+    case $line in
+        M*)
+            music="${line#?}"
+            if [ -n "$music" ]; then
+                music="%{Iicons/xbm/phones.xbm} ${music} "
+            fi
+            ;;
+        S*)
+            time="${line#?}" #http://wiki.bash-hackers.org/syntax/pe#substring_removal
+            ;;
+        T*)
+            title="${line#?}"
+            ;;
+        W*)
+            # bspwm internal state
+            desktops=""
+            IFS=':'
+            set -- ${line#?}
+            while [ $# -gt 0 ] ; do
+                item=$1
+                name=${item#?}
+                case $item in
+                    # always show focused desktops
+                    O*|F*|U*)
+                        desktops="${desktops}%{F$COLOR_FOCUSED_DESKTOP_FG}%{B$COLOR_FOCUSED_DESKTOP_BG} ${name} %{B-}%{F-}"
+                        ;;
+                    # show used unfocused (hide free unused)
+                    o*|u*)#f*
+                        desktops="${desktops}%{F$COLOR_DESKTOP_FG}%{B$COLOR_DESKTOP_BG}%{A:bspc desktop -f ${name}:} ${name} %{A}%{B-}%{F-}"
+                        ;;
+                esac
+                shift
+            done
+            ;;
+    esac
+    printf "%s\n" "%{l}%{A4:bspc desktop -f next.occupied:}%{A5:bspc desktop -f prev.occupied:}${desktops}%{A}%{A}%{A:bspc desktop -f prev.occupied:} %{Iicons/xbm/prev.xbm} %{A}%{A:bspc desktop -f next.occupied:} %{Iicons/xbm/next.xbm} %{A}%{c}%{Iicons/xbm/fox.xbm} ${title}%{r}${music}%{Iicons/xbm/clock.xbm} ${time} "
+done

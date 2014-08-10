@@ -1,0 +1,17 @@
+#! /bin/sh
+format=$1
+
+if [ -z "${format}" ]; then
+	echo "Format required: (eg. $0 %H:%M)"
+	exit 1
+fi
+
+while :
+do
+	date +"$format"
+	if [ $? -ne 0 ]; then
+		echo "Error"
+		exit 1
+	fi
+	sleep $((60-10#`date +"%S"`))
+done
