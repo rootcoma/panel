@@ -1,0 +1,29 @@
+#! /bin/sh
+
+if [ $(pgrep -cx panel) -gt 1 ] ; then
+    printf "%s\n" "Panel is already running." >&2
+    exit 1
+fi
+
+trap 'trap - TERM; kill 0' INT TERM QUIT EXIT
+
+PANEL_FIFO=/tmp/panel-fifo
+PANEL_FONT_FAMILY="-*-terminus-medium-r-normal-*-12-*-*-*-c-*-*-1"
+
+[ -e $PANEL_FIFO ] && rm $PANEL_FIFO
+mkfifo $PANEL_FIFO
+
+dir=$(dirname $(readlink -f $0))
+cd $dir
+
+bspc control --subscribe > "$PANEL_FIFO" &
+./scripts/clock "S%a %b %d %H:%M" > "$PANEL_FIFO" &
+xtitle -sf "T%s" > "$PANEL_FIFO" &
+./scripts/mpd-status.py -f "M(%s/%n) %t" -n "M(%x) %t" -d "M" > $PANEL_FIFO &
+
+. ./panel_colors
+
+cat $PANEL_FIFO | ./panel_bar | bar -g x16 -F "$COLOR_FOREGROUND" -B "$COLOR_BACKGROUND" -f "$PANEL_FONT_FAMILY" | while read -r line; do $line; done
+
+wait
+
