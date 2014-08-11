@@ -19,7 +19,7 @@ cd $dir
 bspc control --subscribe > "$PANEL_FIFO" &
 ./scripts/clock "S%a %b %d %H:%M" > "$PANEL_FIFO" &
 xtitle -sf "T%s" > "$PANEL_FIFO" &
-./scripts/mpd-status.py -f "M(%s/%n) %t" -n "M(%x) %t" -d "M" > $PANEL_FIFO &
+./scripts/mpd-status.py -s -c -l 14 -f "M(%s/%n) ?a@%a - @%t [%w/%l] ?r@<r>@?d@<z>@" -n "M%(%x) ?a@%a - @%t [%w/%l] ?r@<r>@?d@<z>@" -d "M" > $PANEL_FIFO &
 
 . ./panel_colors
 
