@@ -12,7 +12,7 @@ while read -r line ; do
         M*)
             music="${line#?}"
             if [ -n "$music" ]; then
-                music=" %{A:scripts/mpd-clipboard.sh /tmp/panel-fifo:} %{Iicons/xbm/phones.xbm}%{A} %{A:ncmpcpp toggle:}${music}%{A}%{A:mpc prev -q:} %{Iicons/xbm/prev.xbm} %{A}%{A:mpc next -q:} %{Iicons/xbm/next.xbm} %{A} "
+                music=" %{A:scripts/mpd-clipboard.sh $PANEL_FIFO:} %{Iicons/xbm/phones.xbm}%{A} %{A:mpc -q toggle:}${music}%{A}%{A:mpc -q prev:} %{Iicons/xbm/prev.xbm} %{A}%{A:mpc -q next:} %{Iicons/xbm/next.xbm} %{A} "
             fi
             ;;
         S*)
@@ -43,5 +43,5 @@ while read -r line ; do
             done
             ;;
     esac
-    printf "%s\n" "%{l}%{A4:bspc desktop -f next.occupied:}%{A5:bspc desktop -f prev.occupied:}${desktops}%{A}%{A}%{c}%{Iicons/xbm/fox.xbm} ${title}%{r}${info}${music}%{Iicons/xbm/clock.xbm} ${time} "
+    printf "%s\n" "%{l}%{A4:bspc desktop -f next.occupied:}%{A5:bspc desktop -f prev.occupied:}${desktops}%{A}%{A}%{c}${title}%{r}${info}${music}%{Iicons/xbm/clock.xbm} ${time} "
 done

@@ -12,6 +12,9 @@ This is the example panel from bspwm with minor changes
 - lemonboy/bar
   - xbm patch (see rootcoma/bar feature_xbm_images)
   - multiple action patch (see rootcoma/bar feature_multiple_action)
+- mopidy
+  - youtube plugin
+  - soundcloud plugin
 - python
   - python-mpd2
 
